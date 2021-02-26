@@ -1,0 +1,14 @@
+{:source-paths ["src"]
+
+ :dependencies [[reagent "1.0.0"]
+                [reagent-utils "0.3.3"]]
+
+ :builds       {:app {:target     :browser
+                      :output-dir "resources/public/js"
+                      :asset-path "/js"
+                      :modules    {:app {:entries [app.core]}}
+                      :devtools
+                      {:after-load  app.core/init!
+                       :http-root   "public"
+                       :http-port   3000
+                       :preloads    [shadow.cljs.devtools.client.hud]}}}}
