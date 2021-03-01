@@ -3,7 +3,8 @@
     "watch_dev": "shadow-cljs watch :app",
     "watch_css": "node-sass-chokidar src/scss/app/core.scss -o resources/public/css/ --watch",
     "dev": "npm-run-all -p watch_css watch_dev",
-    "deploy": "node-sass-chokidar src/scss/app/core.scss -o resources/public/css/ && shadow-cljs release :app && firebase deploy"
+    "build": "node-sass-chokidar src/scss/app/core.scss -o resources/public/css/ && shadow-cljs release :app",
+    "deploy": "npm run build && firebase deploy"
   },
   "devDependencies": {
     "firebase-admin": "^9.5.0",
