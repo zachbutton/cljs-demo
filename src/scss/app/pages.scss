@@ -1,0 +1,202 @@
+@import './defaults.scss';
+
+#incrementer-page {
+	text-align: center;
+}
+
+#temperature-page {
+	text-align: center;
+}
+
+#flights-page {
+	text-align: center;
+	position: relative;
+
+	.inputs {
+		margin: 0 auto;
+		width: 320px;
+
+		.error {
+			color: $color-error;
+		}
+
+		input.error {
+			background: $color-error + 120;
+		}
+
+		& > div.row {
+			width: 100%;
+			margin: 0 0 10px;
+			justify-content: end;
+			text-align: right;
+
+			& > select,
+			& > input {
+				width: 180px;
+			}
+		}
+	}
+}
+
+#timer-page {
+	width: 480px;
+	margin: 0 auto;
+
+	.bar {
+		margin: 10px 0;
+
+		&:first-child {
+			margin-top: 0;
+		}
+
+		&:last-child {
+			margin-top: 0;
+		}
+	}
+
+	#timer-bar {
+		display: flex;
+		align-items: stretch;
+		button.reset {
+		}
+		.outer {
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			background: $color-mid;
+
+			&,
+			& .inner {
+				border-radius: 5px;
+			}
+
+			.inner {
+				position: absolute;
+				top: 0;
+				left: 0;
+				bottom: 0;
+				background: $color-accent;
+				transition: width 0.05s ease;
+			}
+
+			.elapsed {
+				position: absolute;
+				z-index: 1;
+				left: 50%;
+				top: 50%;
+				transform: translateX(-50%) translateY(-50%);
+				color: $color-darkest;
+				opacity: 0.5;
+			}
+		}
+	}
+
+	#control-bar {
+		text-align: center;
+		input.max {
+			outline: none;
+		}
+		input.max,
+		button,
+		span {
+			vertical-align: middle;
+		}
+	}
+}
+
+#crud-page {
+	width: 500px;
+	margin: 0 auto;
+	.users {
+		margin: 20px 0;
+		display: flex;
+		justify-content: stretch;
+		select.user-selection {
+			flex-grow: 1;
+			height: 120px;
+		}
+
+		.user-fields {
+			margin: 0 0 0 10px;
+			.user-field {
+				margin: 0 0 10px;
+				text-align: right;
+				input {
+					width: 150px;
+				}
+			}
+		}
+	}
+}
+
+#circles-page {
+	.controls {
+		text-align: center;
+		margin: 0 0 10px;
+	}
+
+	.canvas-container {
+		position: relative;
+		svg.canvas {
+			width: 100%;
+			border: 1px solid $color-mid;
+			height: 400px;
+			overflow: hidden;
+			position: relative;
+
+			circle {
+				fill: transparent;
+				stroke: $color-dark;
+				cursor: pointer;
+
+				fill-opacity: 0;
+
+				&:hover {
+					fill-opacity: 0.4;
+					fill: $color-mid;
+				}
+
+				&.selected {
+					fill: $color-accent;
+					fill-opacity: 0.4;
+				}
+			}
+		}
+
+		.resize-button-box {
+			position: absolute;
+			z-index: 1;
+			background: $color-lightest;
+			border: 1px solid $color-mid;
+			box-shadow: 3px 3px 5px $color-dark;
+			padding: 2px 7px;
+			color: $color-dark;
+			outline: none;
+
+			&:hover {
+				background: $color-mid;
+			}
+		}
+	}
+
+	#resize-dialog {
+		position: absolute;
+		z-index: 2;
+		top: 200px;
+		left: 50%;
+		transform: translateX(-50%);
+
+		background: $color-light;
+		border: 1px solid $color-mid;
+
+		box-shadow: 3px 3px 5px $color-dark;
+
+		padding: 30px;
+	}
+}
+
+#cells-page {
+	.spreadsheet {
+		height: 700px;
+	}
+}

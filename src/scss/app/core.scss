@@ -1,3 +1,69 @@
+@import './defaults.scss';
+@import './pages.scss';
+@import './Spreadsheet.scss';
+
 body {
-	background: green;
+	font-family: sans-serif;
+	margin: 0;
+	padding: 0;
+	background: $color-darkest;
+
+	box-sizing: border-box;
+	color: $color-darkest;
+
+	* {
+		box-sizing: inherit;
+		color: inherit;
+	}
+
+	.main_container {
+		width: 960px;
+		margin: 0 auto;
+		background: $color-lightest;
+
+		border-left: 1px solid $color-dark;
+		border-right: 1px solid $color-dark;
+
+		box-shadow: 0 0 10px 0 ($color-darkest - 20);
+
+		height: 100vh;
+		overflow: hidden;
+
+		& > header {
+			padding: 40px 0 40px;
+			margin: 0 40px 40px;
+			text-align: center;
+			border-bottom: 1px solid $color-mid;
+			.links {
+				display: inline-block;
+				padding: 0 0;
+				a {
+					padding: 0 4px 5px;
+					color: $color-dark;
+					margin: 0 15px;
+					border-bottom: 2px solid transparent;
+					transition: color 0.2s ease, border-color 0.2s ease;
+					&:hover {
+						border-color: $color-dark;
+					}
+					&.active {
+						color: $color-darkest;
+						cursor: default;
+						pointer-events: none;
+
+						border-color: $color-darkest;
+					}
+				}
+			}
+		}
+
+		& > footer {
+			margin: 80px 0 0;
+			text-align: center;
+		}
+	}
+
+	.main_content {
+		padding: 0 40px;
+	}
 }

@@ -1,14 +1,21 @@
-{:source-paths ["src"]
+{:source-paths ["src/cljs"]
 
  :dependencies [[reagent "1.0.0"]
-                [reagent-utils "0.3.3"]]
+                [reagent-utils "0.3.3"]
+                [kibu/pushy "0.3.8"]
+                [re-frame "1.2.0"]
+                [instaparse "1.4.10"]
+                [bidi "2.1.6"]]
 
  :builds       {:app {:target     :browser
                       :output-dir "resources/public/js"
                       :asset-path "/js"
                       :modules    {:app {:entries [app.core]}}
                       :devtools
-                      {:after-load  app.core/init!
-                       :http-root   "public"
+                      {:after-load  app.core/main
+                       :watch-dir "resources/public"
+                       :http-root   "resources/public"
                        :http-port   3000
-                       :preloads    [shadow.cljs.devtools.client.hud]}}}}
+                       :preloads    [shadow.cljs.devtools.client.hud]}}}
+
+ :dev-http {3000 "resources/public"}}

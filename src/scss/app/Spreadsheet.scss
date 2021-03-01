@@ -1,0 +1,71 @@
+@import './defaults.scss';
+
+.spreadsheet {
+	width: 100%;
+	height: auto;
+	overflow-x: auto;
+	overflow-y: auto;
+
+	table {
+		border: 1px solid $color-darkest;
+		border-collapse: collapse;
+		table-layout: fixed;
+		td {
+			border: 1px solid $color-darkest;
+			$width: 120px;
+			width: $width;
+			overflow: hidden;
+			.cell-contents {
+				position: relative;
+				width: $width;
+				height: 18px;
+				line-height: 18px;
+
+				&.error {
+					input,
+					span {
+						color: $color-error;
+					}
+				}
+
+				input,
+				span {
+					position: absolute;
+					top: 1px;
+					left: 1px;
+					right: 1px;
+					bottom: 1px;
+					background: $color-lightest;
+					border: none;
+					padding: 0;
+					margin: 0;
+					width: $width;
+					cursor: text;
+					font-size: 11px;
+					font-family: monospace;
+					white-space: nowrap;
+				}
+
+				span {
+					z-index: 1;
+					pointer-events: none;
+				}
+
+				input:focus {
+					z-index: 2;
+				}
+			}
+		}
+
+		td.header {
+			cursor: default;
+			background: $color-dark;
+			color: $color-lightest;
+			text-align: center;
+
+			&.side {
+				padding: 0 10px;
+			}
+		}
+	}
+}
