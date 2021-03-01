@@ -1,11 +1,6 @@
 (ns app.pages.cells
   (:require
-   [reagent.core :as r]
-   [re-frame.core :as rf]
-   [app.events :as events]
-   [clojure.string :as string]
-   [app.components.Spreadsheet :as Spreadsheet]
-   [app.utils :as utils :refer [now]]))
+   [app.components.Spreadsheet :as Spreadsheet]))
 
 (defn page []
   (fn []

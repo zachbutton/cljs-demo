@@ -2,9 +2,7 @@
   (:require
    [reagent.core :as r]
    [re-frame.core :as rf]
-   [app.events :as events]
-   [clojure.string :as string]
-   [app.utils :as utils :refer [now]]))
+   [app.events :as events]))
 
 (rf/reg-sub
  ::circles

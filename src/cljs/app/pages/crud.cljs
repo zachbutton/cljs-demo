@@ -3,8 +3,7 @@
    [reagent.core :as r]
    [re-frame.core :as rf]
    [app.events :as events]
-   [clojure.string :as string]
-   [app.utils :as utils :refer [now]]))
+   [clojure.string :as string]))
 
 (rf/reg-sub
  ::crud-items

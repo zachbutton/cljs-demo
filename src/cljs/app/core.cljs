@@ -1,12 +1,9 @@
 (ns app.core
   (:require
-   [reagent.core :as reagent :refer [atom]]
    [reagent.dom :as rdom]
-   [reagent.session :as session]
    [re-frame.core :as rf]
    [app.routes :as routes]
 
-   [clojure.string :as string]
    [app.pages.home :as home]
    [app.pages.incrementer :as incrementer]
    [app.pages.temperature :as temperature]
