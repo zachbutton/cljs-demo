@@ -11,7 +11,8 @@
    [app.pages.timer :as timer]
    [app.pages.crud :as crud]
    [app.pages.circles :as circles]
-   [app.pages.cells :as cells]))
+   [app.pages.cells :as cells]
+   [app.pages.cellsstress :as cells-stress]))
 
 (rf/reg-sub
  ::active-page
@@ -28,6 +29,7 @@
     :crud-page [crud/page]
     :circles-page [circles/page]
     :cells-page [cells/page]
+    :cells-stress-page [cells-stress/page]
     nil))
 
 (defn layout []
