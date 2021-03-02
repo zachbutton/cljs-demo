@@ -154,13 +154,20 @@
        (swap! cell assoc :error true)))))
 
 (defn Cell []
-  (fn [props]
-    (let [cell (:cell props)
-          on-stale (:on-stale props)]
-      (when (:stale @cell) (on-stale))
-      [:div {:class ["cell-contents" (when (:error @cell) "error") (when (:state @cell) "stale")] :style (:style props)}
-       [:input {:value (:raw-value @cell) :on-change (:on-change props)}]
-       [:span (str (:value @cell))]])))
+  (let [editing (r/atom false)]
+    (fn [props]
+      (let [cell (:cell props)
+            on-stale (:on-stale props)]
+        (when (:stale @cell) (on-stale))
+        [:input {:class ["cell-contents" (when (:error @cell) "error") (when (:state @cell) "stale")]
+                 :style (:style props)
+                 :value (if @editing (:raw-value @cell) (:value @cell))
+                 :editing (str @editing)
+                 :on-focus (fn []
+                             (reset! editing true))
+                 :on-blur (fn []
+                            (reset! editing false))
+                 :on-change (:on-change props)}]))))
 
 (defn component [props]
   (let [sheet (:sheet props)
@@ -177,14 +184,14 @@
                                                    rect (.getBoundingClientRect elem)
                                                    width (-> rect .-width)
                                                    height (-> rect .-height)]
-                                               (js/clearTimeout scroll-timeout)
+                                               (js/clearTimeout @scroll-timeout)
                                                (reset! scroll-timeout
                                                        (js/setTimeout
                                                         (fn []
                                                           (reset! render-range
                                                                   {:x [(- scrollLeft cell-width) (+ scrollLeft width cell-width)]
                                                                    :y [(- scrollTop cell-height) (+ scrollTop height cell-height)]}))
-                                                        100))))}
+                                                        50))))}
        [:div.spreadsheet-inner {:style {:width (str table-width "px")
                                         :height (str table-height "px")}}
 
