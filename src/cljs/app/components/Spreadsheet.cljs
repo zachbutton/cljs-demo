@@ -8,7 +8,8 @@
 (def operators {:SUB (fn [& args] (apply - args))
                 :SUM (fn [& args] (apply + args))
                 :MUL (fn [& args] (apply * args))
-                :DIV (fn [& args] (apply / args))})
+                :DIV (fn [& args] (apply / args))
+                :AVG (fn [& args] (/ (apply + args) (count args)))})
 
 (def ref-regex #"[A-Z]+[0-9]+")
 
@@ -48,17 +49,16 @@
                                  :provides []
                                  :stale false}))
 
-(defn create-sheet [width height]
-  (into (sorted-map)
-        (for [x (range width) y (range height)]
-          (let [cell (create-cell [x y])]
-            {(:key @cell) cell}))))
+(defn get-cell [sheet key]
+  (when (nil? (get @sheet key))
+    (swap! sheet assoc key (create-cell key)))
+  (get @sheet key))
 
 (def parse-cell-formula
   (insta/parser
    "FORMULA = <'='> EXP
    EXP      = OPERATOR <'('> OPERAND+ <')'>
-   OPERATOR = 'SUM' | 'SUB' | 'MUL' | 'DIV'
+   OPERATOR = 'SUM' | 'SUB' | 'MUL' | 'DIV' | 'AVG'
    OPERAND  = REF | SPAN | NUM | EXP | <' '>
    REF      = #'[A-Z]+[0-9]+'
    NUM      = #'[0-9]+'
@@ -75,10 +75,10 @@
     :EXP (let [exp-res (calculate-cell-expression sheet starting-cell operand)]
            {:deps (:deps exp-res) :val (:val exp-res)})
 
-    :REF (let [ref-cell (get sheet (ref-to-key (first (:content operand))))]
+    :REF (let [ref-cell (get-cell sheet (ref-to-key (first (:content operand))))]
            (when (= (:key @starting-cell) (:key @ref-cell)) (throw {:message loop-exception}))
            (let [ref-res (if (:stale @ref-cell)
-                           (calculate-cell-value sheet starting-cell (get sheet (ref-to-key (first (:content operand)))))
+                           (calculate-cell-value sheet starting-cell (get-cell sheet (ref-to-key (first (:content operand)))))
                            {:deps (:deps @ref-cell) :val (:value @ref-cell)})]
              (doall (for [dep (:deps ref-res)]
                       (when (= dep (:key @starting-cell)) (throw {:message loop-exception}))))
@@ -127,7 +127,7 @@
        ;; Clear self from obsolete deps provides
        (doall (for [key (:deps @cell)]
                 (when (not (some #(= key %) deps))
-                  (let [pr-cell (get sheet key)]
+                  (let [pr-cell (get-cell sheet key)]
                     (swap! pr-cell assoc :provides (remove #{key} (:provides pr-cell)))))))
 
        (swap! cell assoc :deps (vec deps))
@@ -136,7 +136,7 @@
        (swap! cell assoc :stale false))
 
      ;; Apply self to deps provides
-     (doall (for [key (:deps @cell)] (let [pr-cell (get sheet key)]
+     (doall (for [key (:deps @cell)] (let [pr-cell (get-cell sheet key)]
                                        (swap! pr-cell assoc :provides
                                               (distinct
                                                (concat (:provides @pr-cell) [(:key @cell)]))))))
@@ -144,7 +144,7 @@
 
      (doall (for [key (:provides @cell)] (do
                                            (js/console.log "Marking" (key-to-ref key) "stale")
-                                           (swap! (get sheet key) assoc :stale true))))
+                                           (swap! (get-cell sheet key) assoc :stale true))))
      (swap! cell assoc :error false)
 
      (catch js/Object err
@@ -163,7 +163,7 @@
        [:span (str (:value @cell))]])))
 
 (defn component [props]
-  (let [sheet (create-sheet (:width props) (:height props))
+  (let [sheet (:sheet props)
         cell-width 125
         cell-height 22
         table-width (+ cell-width (* cell-width (:width props)))
@@ -206,7 +206,7 @@
                        [:div.cell-contents.header.left {:style style :key (str x "-" y)} (when (not= y -1) (+ y 1))]
                        (if (= y -1)
                          [:div.cell-contents.header.top {:style style :key (str x "-" y)} (when (not= x -1) (col-to-char x))]
-                         (let [cell (get sheet [x y])]
+                         (let [cell (get-cell sheet [x y])]
                            [Cell {:cell cell
                                   :key (str x "-" y)
                                   :style style
