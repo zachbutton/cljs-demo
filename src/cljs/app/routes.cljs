@@ -12,7 +12,8 @@
                   "timer" :timer
                   "crud" :crud
                   "circles" :circles
-                  "cells" :cells}])
+                  "cells" :cells
+                  "cells-stress" :cells-stress}])
 
 (defn- parse-url [url]
   (bidi/match-route routes url))
